@@ -10,12 +10,16 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@ai-sdk/vue": "^1.1.19",
+    "@ai-sdk/xai": "^1.1.12",
     "@nuxtjs/supabase": "^1.4.6",
     "@supabase/supabase-js": "^2.49.1",
     "@tailwindcss/vite": "^4.0.9",
+    "ai": "^4.1.46",
     "nuxt": "^3.15.4",
     "vue": "latest",
-    "vue-router": "latest"
+    "vue-router": "latest",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "daisyui": "^5.0.0-beta.9",
