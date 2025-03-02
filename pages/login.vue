@@ -1,7 +1,5 @@
 <script setup>
-  // Reactive state
   const supabase = useSupabaseClient()
-  const user = useSupabaseUser()
   const loginEmail = ref('')
   const loginPassword = ref('')
   const signupEmail = ref('')
@@ -25,6 +23,7 @@
       error.value = err.message
     } finally {
       loading.value = false
+      navigateTo('/')
     }
   }
   
@@ -64,13 +63,7 @@
 
 <template>
     <div class="min-h-screen flex items-center justify-center bg-gray-100">
-      <div v-if="user" class="card w-96 bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h1 class="card-title text-2xl">Welcome, {{ user.email }}!</h1>
-          <button class="btn btn-primary" @click="signOut">Log Out</button>
-        </div>
-      </div>
-      <div v-else class="card w-96 bg-base-100 shadow-xl">
+      <div class="card w-96 bg-base-100 shadow-xl">
         <div class="card-body">
           <!-- Login Form -->
           <h2 class="card-title text-2xl">Log In</h2>
