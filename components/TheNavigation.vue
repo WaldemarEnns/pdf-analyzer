@@ -1,7 +1,8 @@
 <script setup lang="ts">
 const user = useSupabaseUser()
 
-const avatar = computed(() => user.value?.user_metadata.avatar_url)
+const avatar = computed(() => user.value?.user_metadata?.avatar_url)
+const fullName = computed(() => user.value?.user_metadata?.full_name || user.value?.email)
 
 const emit = defineEmits<{
   logout: [void]
@@ -37,9 +38,10 @@ const logout = () => {
         tabindex="0"
         class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
         <li>
-          <a class="justify-between">
+          <NuxtLink to="/profile" class="justify-between">
             Profile
-          </a>
+            <span v-if="fullName" class="badge">{{ fullName }}</span>
+          </NuxtLink>
         </li>
         <li><a @click="logout">Logout</a></li>
       </ul>
