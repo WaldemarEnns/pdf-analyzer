@@ -1,6 +1,4 @@
 <script setup>
-    const user = useSupabaseUser()
-    
     // AI text generation
     const prompt = ref('')
     const aiResponse = ref('')
@@ -37,15 +35,6 @@
 
 <template>
     <div class="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
-      <div class="card w-96 bg-base-100 shadow-xl mb-6">
-        <div class="card-body">
-          <h1 class="card-title text-2xl">Home Page</h1>
-          <p v-if="user">You are logged in as {{ user.email }}</p>
-          <p v-else>You are not logged in.</p>
-          <NuxtLink to="/login" class="btn btn-primary">Go to Login</NuxtLink>
-        </div>
-      </div>
-      
       <!-- AI Text Generation Card -->
       <div class="card w-96 bg-base-100 shadow-xl">
         <div class="card-body">
