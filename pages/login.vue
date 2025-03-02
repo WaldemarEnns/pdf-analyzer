@@ -6,6 +6,7 @@
   const signupPassword = ref('')
   const loading = ref(false)
   const error = ref(null)
+  const isNewUser = ref(false)
   
   // Login handler
   const handleLogin = async () => {
@@ -19,11 +20,11 @@
       if (loginError) throw loginError
       loginEmail.value = ''
       loginPassword.value = ''
+      navigateTo('/')
     } catch (err) {
       error.value = err.message
     } finally {
       loading.value = false
-      navigateTo('/')
     }
   }
   
@@ -32,13 +33,20 @@
     loading.value = true
     error.value = null
     try {
-      const { error: signupError } = await supabase.auth.signUp({
+      const { error: signupError, data } = await supabase.auth.signUp({
         email: signupEmail.value,
         password: signupPassword.value,
       })
       if (signupError) throw signupError
-      signupEmail.value = ''
-      signupPassword.value = ''
+      
+      // Check if user was created successfully
+      if (data?.user) {
+        isNewUser.value = true
+        signupEmail.value = ''
+        signupPassword.value = ''
+        // Redirect to profile page for setup
+        navigateTo('/profile')
+      }
     } catch (err) {
       error.value = err.message
     } finally {
@@ -135,8 +143,15 @@
             </div>
           </form>
   
+          <!-- Success Message for New User -->
+          <div v-if="isNewUser" class="alert alert-success mt-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span>Account created successfully! Redirecting to profile setup...</span>
+          </div>
+  
           <!-- Error Display -->
           <div v-if="error" class="alert alert-error mt-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             <span>{{ error }}</span>
           </div>
         </div>
