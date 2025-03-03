@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const user = useSupabaseUser()
 const router = useRouter()
-const { getUserProfile, updateUserProfile, uploadAvatar } = useProfile()
+const { getUserProfile, updateUserProfile, uploadAvatar, deleteAvatar } = useProfile()
 
 // Redirect if not logged in
 onMounted(() => {
@@ -35,6 +35,28 @@ const handleFileChange = (event: Event) => {
     avatarFile.value = file
     // Create a preview URL
     avatarPreview.value = URL.createObjectURL(file)
+  }
+}
+
+// Delete avatar
+const handleDeleteAvatar = async () => {
+  loading.value = true
+  error.value = null
+  success.value = false
+  
+  try {
+    await deleteAvatar()
+    
+    // Update local state
+    avatarUrl.value = ''
+    avatarPreview.value = ''
+    avatarFile.value = null
+    
+    success.value = true
+  } catch (err: any) {
+    error.value = err.message
+  } finally {
+    loading.value = false
   }
 }
 
@@ -104,12 +126,23 @@ const updateProfile = async () => {
                     <img :src="avatarPreview || 'https://placehold.co/100'" alt="Avatar preview" />
                   </div>
                 </div>
-                <input
-                  type="file"
-                  accept="image/*"
-                  class="file-input file-input-bordered w-full max-w-xs"
-                  @change="handleFileChange"
-                />
+                <div class="flex flex-col space-y-2">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    class="file-input file-input-bordered w-full max-w-xs"
+                    @change="handleFileChange"
+                  />
+                  <button 
+                    v-if="avatarUrl || avatarPreview" 
+                    type="button" 
+                    class="btn btn-error btn-sm" 
+                    @click="handleDeleteAvatar"
+                    :disabled="loading"
+                  >
+                    Delete Avatar
+                  </button>
+                </div>
               </div>
             </div>
             
