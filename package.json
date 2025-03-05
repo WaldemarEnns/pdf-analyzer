@@ -19,6 +19,7 @@
     "ai": "^4.1.46",
     "nuxt": "^3.15.4",
     "vue": "latest",
+    "vue-pdf-embed": "^2.1.2",
     "vue-router": "latest",
     "zod": "^3.24.2"
   },
